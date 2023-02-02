@@ -1,0 +1,42 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Player : MonoBehaviour
+{
+    public float Speed;
+    public float Moviment;
+
+    private Rigidbody2D Rig;
+    
+    // Start is called before the first frame update
+    void Start()
+    {
+        Rig = GetComponent<Rigidbody2D>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        Move(); 
+    }
+
+    void FixedUpdate()
+    {
+        Rig.velocity = new Vector2(Rig.velocity.x, -Speed);
+    }
+
+    public void Move()
+    {
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        if(horizontal < 0)
+        {
+            Rig.position = Rig.position + new Vector2(-Moviment, 0f);
+        }
+
+        if (horizontal > 0)
+        {
+            Rig.position = Rig.position + new Vector2(Moviment, 0f);
+        }
+    }
+}
