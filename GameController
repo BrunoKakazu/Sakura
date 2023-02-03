@@ -2,17 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;  
 
 public class GameController : MonoBehaviour
 {
     public Text textPontuation;
     public Player player;
+    public AudioClip sfxLose;
+    public AudioController BGM;
+    public GameObject gameOverPanel;
+    public GameObject PausePanel;
+    public static GameController instance;
 
     Vector3 posIni;
     // Start is called before the first frame update
     void Start()
     {
+        instance = this;
         posIni = player.transform.position;
+        
+        Time.timeScale = 1;
     }
 
     // Update is called once per frame
@@ -21,5 +30,35 @@ public class GameController : MonoBehaviour
         Vector3 distance = -player.transform.position - posIni;
         float pontuation = distance.y;
         textPontuation.text = pontuation.ToString("0");
+    }
+
+    public void UnPause()
+    {
+        PausePanel.SetActive(false);
+        Time.timeScale = 1;
+    }
+
+    public void MainMenu()
+    {
+        SceneManager.LoadScene(1);
+    }
+
+    public void ShowPause()
+    {
+        PausePanel.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    public void ShowGameOver()
+    {
+        BGM.PlaySFX(sfxLose);
+        Vector3 initCam = new Vector3(0f, 0f, transform.position.z);
+        gameOverPanel.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(0);
     }
 }
