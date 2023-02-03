@@ -1,0 +1,47 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Tilemaps;
+
+
+public class Build_Controller : MonoBehaviour
+{
+    public Tile BrownSquare;
+    public float castDistance;
+    public Tilemap GroundTilemap;
+    public LayerMask Layer;
+    public Transform Point;
+
+
+    Vector3 Direction;
+    RaycastHit2D hit;
+
+    void FixedUpdate()
+    {
+        HitDirection();
+    }
+
+    void HitDirection()
+    {
+        Direction.x = Input.GetAxis("Horizontal");
+
+        hit = Physics2D.Raycast(Point.position, Direction, castDistance, Layer.value);
+
+        Vector2 endpos = Point.position + Direction;
+
+        if(Point.position != null)
+        {
+            StartCoroutine(PaintBlock(hit.collider.gameObject.GetComponent<Tilemap>(), endpos));
+        }
+    }
+
+    IEnumerator PaintBlock(Tilemap map, Vector2 pos)
+    {
+        yield return new WaitForSeconds(0.45f);
+        pos.x = Mathf.Floor(pos.x);
+        pos.y = Mathf.Floor(pos.y);
+
+        //map.SetTile(new Vector3Int((int)pos.x, (int)pos.y), null);
+        map.SetTile(new Vector3Int((int)pos.x, (int)pos.y), BrownSquare);
+    }
+}
