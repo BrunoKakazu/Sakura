@@ -1,34 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    public bool stop;
+    public float coef;
+    public float Health;
     public float Speed;
     public float Moviment;
+    public Text textHealth;
 
     private Rigidbody2D Rig;
-    
+
     // Start is called before the first frame update
     void Start()
     {
         Rig = GetComponent<Rigidbody2D>();
+        Health = 100f;
+        stop = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Move(); 
+        Move();
+        Pause();
+    }
+
+    private void LateUpdate()
+    {
+        life();
     }
 
     void FixedUpdate()
     {
         Rig.velocity = new Vector2(Rig.velocity.x, -Speed);
+
     }
 
     public void Move()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
+        float horizontal = Input.GetAxis("Horizontal");
         if(horizontal < 0)
         {
             Rig.position = Rig.position + new Vector2(-Moviment, 0f);
@@ -37,6 +51,29 @@ public class Player : MonoBehaviour
         if (horizontal > 0)
         {
             Rig.position = Rig.position + new Vector2(Moviment, 0f);
+        }
+    }
+    public void hitWater()
+    {
+        Health += 100f;
+    }
+    
+    public void life()
+    {
+        Health -= coef * Time.deltaTime;
+        textHealth.text = Health.ToString("0");
+        if (Health <= 0f && !stop)
+        {
+            stop = true;
+            GameController.instance.ShowGameOver();
+        }
+    }
+
+    public void Pause()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            GameController.instance.ShowPause();
         }
     }
 }
