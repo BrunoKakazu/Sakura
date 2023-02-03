@@ -41,7 +41,6 @@ public class Build_Controller : MonoBehaviour
         pos.x = Mathf.Floor(pos.x);
         pos.y = Mathf.Floor(pos.y);
 
-        //map.SetTile(new Vector3Int((int)pos.x, (int)pos.y), null);
         map.SetTile(new Vector3Int((int)pos.x, (int)pos.y), BrownSquare);
     }
 }
